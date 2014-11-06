@@ -1,0 +1,80 @@
+#include<stdio.h>
+#include<string.h>
+#define MAXN 100
+int s[MAXN];
+int counttimes(int a, int i, int s[])
+{
+int count = 0, k;
+for(k = 0; k < i; k++)
+        if(s[k] == a) count++;
+return count;
+}
+
+int main()
+{
+ int x, i = 0, j, m;
+ while(scanf("%d",&x) == 1) s[i++] = x;
+ int cm[i][2];
+ for(j = 0; j < i; j++) 
+  {
+   cm[j][0] = s[j];
+   cm[j][1] = counttimes(s[j],i,s);
+  }
+
+ int rs[MAXN][2];
+rs[0][0] = cm[0][0];
+rs[0][1] = cm[0][1]; 
+int k = 1;
+for(j = 1; j < i; j++)
+{	
+	int mn = 0;
+	for(m = j - 1; m >= 0; m--)
+	{
+	 if(cm[j][0] == cm[m][0]) mn++;
+	}
+	if(mn == 0)
+	{
+		rs[k][0] = cm[j][0];
+		rs[k][1] = cm[j][1];
+		k++;
+	}
+}
+int tmp[1][2];
+for(j = 0; j < k; j++)
+{
+ for(i = j+1; i < k; i++)
+ {
+  if(rs[j][1] <= rs[i][1])
+   {
+	for(m = 0; m < 2; m++)
+	{
+	tmp[0][m] = rs[j][m];
+	rs[j][m] = rs[i][m];
+	rs[i][m] = tmp[0][m];
+	}
+  if(rs[j][1] == rs[i][1])
+   {
+	if(rs[j][0] < rs[i][0])
+	{
+	for(m = 0; m < 2; m++)
+	{
+	tmp[0][m] = rs[j][m];
+        rs[j][m] = rs[i][m];
+        rs[i][m] = tmp[0][m];
+	}
+	}	
+   }
+   }
+ }
+}
+printf("%d\n", rs[0][0]);
+for(m = 1; m < i; m++)
+{
+if(rs[m][1] == rs[0][1])
+{
+printf("%d\n",rs[m][0]);
+}
+}
+return 0;
+}
+
